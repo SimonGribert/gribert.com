@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import Person from './Person'
-import classNames from '@/utils/classnames'
+import classNames from '@/utils/classNames'
 
 const persons = [
   {
@@ -45,14 +45,14 @@ const Carousel = () => {
                 setCurrentPos(i)
             }}
             className={classNames(
-              i === currentPos ? 'bg-white' : 'bg-gray-400',
+              i === currentPos ? 'dark:bg-slate-100 bg-slate-700' : 'bg-slate-400',
               'w-4 h-4 mx-1 rounded-sm cursor-pointer flex justify-center items-center',
             )}
             key={i}
           >
             <div
               className={classNames(
-                i === currentPos ? 'bg-black' : 'bg-gay-400',
+                i === currentPos ? 'dark:bg-slate-950 bg-slate-300' : 'bg-slate-400',
                 'w-3 h-3 rounded-sm',
               )}
             ></div>
