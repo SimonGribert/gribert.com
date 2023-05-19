@@ -1,21 +1,23 @@
 import Image from 'next/image'
 import React from 'react'
 
-interface PersonProps {
+export interface IPersonProps {
   name: string;
   title: string;
   image: string;
 }
 
-const Person = ({ name, title, image }: PersonProps) => {
+const Person = ({ name, title, image }: IPersonProps) => {
   return (
-    <div className="relative flex">
+    <div className="flex">
       <div className="rounded-xl w-64 dark:bg-slate-800 bg-slate-100">
         <div className="h-80 relative z-10">
           <Image
             src={image}
+            priority
             alt=""
-            fill={true}
+            fill
+            sizes="320px"
             className="rounded-xl object-cover"
           />
         </div>

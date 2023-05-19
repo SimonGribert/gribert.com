@@ -11,7 +11,9 @@ export const metadata = {
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en" className="dark">
-      <body className={archivo.className}>{children}</body>
+      <body suppressHydrationWarning={true} className={archivo.className}>
+        {children}
+      </body>
     </html>
   )
 }

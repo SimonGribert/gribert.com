@@ -16,6 +16,9 @@ module.exports = {
       screens: {
         'md': '832px',
       },
+      height: {
+        'sscreen': '100svh',
+      }
     },
   },
   plugins: [],
