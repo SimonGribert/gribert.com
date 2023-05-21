@@ -61,9 +61,9 @@ const Carousel = () => {
   const handleEnd = (x: number) => {
     if (swiping) {
       if (x - startX < -50) {
-        paginate(-1)
-      } else if (x - startX > 50) {
         paginate(1)
+      } else if (x - startX > 50) {
+        paginate(-1)
       }
 
       setSwiping(false)
