@@ -1,9 +1,10 @@
 'use client'
-import React, { useState } from 'react'
+import React, { MouseEvent, TouchEventHandler, useState } from 'react'
 import Person from './Person'
 import classNames from '@/utils/classNames'
 import { wrap } from 'popmotion'
 import PersonMobile from './PersonMobile'
+import { isMouseEvent, isTouchEvent } from '@/utils/isEvent'
 
 const persons = [
   {
@@ -25,24 +26,64 @@ const persons = [
 
 const Carousel = () => {
   const [[page, direction], setPage] = useState([0, 0])
+  const [swiping, setSwiping] = useState(false)
+  const [startX, setStartCoordinates] = useState(0)
 
   const personIndex = wrap(0, persons.length, page)
 
-  const paginate = (i: number) => {
-    const newDirection =
-      personIndex === 0 && i === 2
-        ? -1
-        : personIndex === 2 && i === 0
-        ? 1
-        : i > personIndex
-        ? 1
-        : -1
-
+  const paginate = (newDirection: number) => {
     setPage([page + newDirection, newDirection])
   }
 
+  const onStart = (e: MouseEvent | React.TouchEvent<HTMLElement>) => {
+    if (isMouseEvent(e)) {
+      handleStart(e.clientX)
+    } else if (isTouchEvent(e)) {
+      handleStart(e.touches[0].clientX)
+    }
+  }
+
+  const onEnd = (e: MouseEvent | React.TouchEvent<HTMLElement>) => {
+    if (isMouseEvent(e)) {
+      handleEnd(e.clientX)
+    } else if (isTouchEvent(e)) {
+      console.log(e)
+      handleEnd(e.changedTouches[0].clientX)
+    }
+  }
+
+  const handleStart = (x: number) => {
+    setSwiping(true)
+
+    setStartCoordinates(x)
+  }
+
+  const handleEnd = (x: number) => {
+    if (swiping) {
+      if (x - startX < -50) {
+        paginate(-1)
+      } else if (x - startX > 50) {
+        paginate(1)
+      }
+
+      setSwiping(false)
+    }
+  }
+
+  const onMouseLeave = () => {
+    setSwiping(false)
+  }
+
   return (
-    <section className="h-full w-full max-w-4xl flex flex-col justify-center">
+    <section
+      onTouchStart={onStart}
+      onTouchCancel={onEnd}
+      onTouchEnd={onEnd}
+      onMouseDown={onStart}
+      onMouseUp={onEnd}
+      onMouseLeave={onMouseLeave}
+      className="h-full w-full max-w-4xl flex flex-col justify-center"
+    >
       <div className="w-full relative flex justify-center md:justify-between md:items-center">
         {persons.map((person, i) => (
           <React.Fragment key={i}>
@@ -64,7 +105,16 @@ const Carousel = () => {
         {persons.map((_, i) => (
           <div
             onClick={() => {
-              paginate(i)
+              const newDirection =
+                personIndex === 0 && i === 2
+                  ? -1
+                  : personIndex === 2 && i === 0
+                  ? 1
+                  : i > personIndex
+                  ? 1
+                  : -1
+
+              paginate(newDirection)
             }}
             className={classNames(
               i === personIndex
